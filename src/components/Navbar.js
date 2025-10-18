@@ -6,9 +6,9 @@ function Navbar() {
 
     const links = [
         { name: "Home", path: "/" },
-        { name: "Smart Allowance", path: "/smart-allowance" },
-        { name: "Employee Payments", path: "/employee-payments" },
-        { name: "Community Savings", path: "/community-savings" },
+        { name: "Smart Allowance", path: "/allowance" },
+        { name: "Employee Payments", path: "/payment" },
+        { name: "Community Savings", path: "/savings" },
         { name: "Dashboard", path: "/dashboard" },
     ];
 

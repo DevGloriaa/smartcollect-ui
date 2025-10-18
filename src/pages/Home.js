@@ -14,7 +14,7 @@ function Home() {
                     from allowances to salary automation and group savings. Secure. Seamless. Smart.
                 </p>
                 <Link
-                    to="/allowance"
+                    // to=""
                     className="px-8 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition"
                 >
                     Get Started
@@ -22,7 +22,7 @@ function Home() {
             </section>
 
             <section className="grid grid-cols-1 md:grid-cols-3 gap-10 w-full max-w-6xl mt-10">
-                {/* Smart Allowance */}
+
                 <div className="p-8 border border-gray-200 rounded-2xl hover:shadow-xl transition bg-white">
                     <h3 className="text-2xl font-semibold text-gray-900 mb-4">Smart Allowance</h3>
                     <p className="text-gray-600 mb-6">

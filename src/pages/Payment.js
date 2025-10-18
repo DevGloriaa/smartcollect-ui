@@ -1,29 +1,64 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-export default function Payment() {
-    const navigate = useNavigate();
-
+function Payment() {
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-blue-50 to-white px-6 py-16">
-            <h1 className="text-4xl font-bold text-blue-700 mb-6">Employee Payments</h1>
-            <p className="text-lg text-gray-700 max-w-2xl text-center mb-8">
-                Simplify your company’s payroll. SmartCollect enables instant, secure, and trackable salary
-                disbursements — all without traditional banking delays or paperwork.
-            </p>
+        <div className="flex flex-col items-center justify-center px-6 md:px-20 py-16 bg-white text-gray-800">
+            <div className="max-w-4xl w-full text-center">
+                <h1 className="text-5xl font-extrabold text-gray-900 mb-6">
+                    Employee Payments
+                </h1>
+                <p className="text-lg text-gray-600 mb-10 leading-relaxed">
+                    Simplify payroll with SmartCollect’s Employee Payments system. Automate salary
+                    disbursements, manage employee accounts, and maintain real-time transparency —
+                    all from a secure, blockchain-powered platform.
+                </p>
 
-            <ul className="text-left bg-white shadow-lg rounded-2xl p-6 mb-8 max-w-md space-y-3">
-                <li>🏦 Pay multiple employees with a single click</li>
-                <li>⏱ Instant, transparent transfers</li>
-                <li>📈 Real-time salary tracking and analytics</li>
-            </ul>
+                <div className="grid md:grid-cols-2 gap-10 text-left">
+                    <div className="bg-gray-50 p-8 rounded-2xl shadow-sm border border-gray-200">
+                        <h2 className="text-2xl font-semibold mb-4 text-gray-900">⚡ Automated Payroll</h2>
+                        <p className="text-gray-600">
+                            Schedule salary payments to employees on any interval — weekly, bi-weekly, or monthly —
+                            without manual transfers or errors.
+                        </p>
+                    </div>
 
-            <button
-                onClick={() => navigate("/create")}
-                className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition"
-            >
-                Get Started
-            </button>
+                    <div className="bg-gray-50 p-8 rounded-2xl shadow-sm border border-gray-200">
+                        <h2 className="text-2xl font-semibold mb-4 text-gray-900">🧾 Payment Records</h2>
+                        <p className="text-gray-600">
+                            Keep detailed payment history for every employee. Easily export data for accounting
+                            and compliance purposes.
+                        </p>
+                    </div>
+
+                    <div className="bg-gray-50 p-8 rounded-2xl shadow-sm border border-gray-200">
+                        <h2 className="text-2xl font-semibold mb-4 text-gray-900">🔐 Blockchain Security</h2>
+                        <p className="text-gray-600">
+                            Each payment is logged securely on-chain — guaranteeing proof of payment,
+                            authenticity, and zero manipulation.
+                        </p>
+                    </div>
+
+                    <div className="bg-gray-50 p-8 rounded-2xl shadow-sm border border-gray-200">
+                        <h2 className="text-2xl font-semibold mb-4 text-gray-900">📈 Payroll Analytics</h2>
+                        <p className="text-gray-600">
+                            Get a visual breakdown of salaries, bonuses, and deductions in one simple dashboard.
+                            Make smarter HR and finance decisions.
+                        </p>
+                    </div>
+                </div>
+
+                <div className="mt-16">
+                    <Link
+                        to="/create"
+                        className="px-10 py-4 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition text-lg"
+                    >
+                        Get Started with Employee Payments
+                    </Link>
+                </div>
+            </div>
         </div>
     );
 }
+
+export default Payment;

@@ -1,29 +1,64 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-export default function Savings() {
-    const navigate = useNavigate();
-
+function Savings() {
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-purple-50 to-white px-6 py-16">
-            <h1 className="text-4xl font-bold text-purple-700 mb-6">Community Savings</h1>
-            <p className="text-lg text-gray-700 max-w-2xl text-center mb-8">
-                Build wealth together with SmartCollect’s community savings feature — designed for groups,
-                clubs, and cooperatives to save collectively with full transparency.
-            </p>
+        <div className="flex flex-col items-center justify-center px-6 md:px-20 py-16 bg-white text-gray-800">
+            <div className="max-w-4xl w-full text-center">
+                <h1 className="text-5xl font-extrabold text-gray-900 mb-6">
+                    Community Savings
+                </h1>
+                <p className="text-lg text-gray-600 mb-10 leading-relaxed">
+                    Empower your community or team to save together. SmartCollect’s Community Savings feature
+                    lets you create transparent, automated, and goal-oriented savings groups — fostering
+                    trust, growth, and collaboration.
+                </p>
 
-            <ul className="text-left bg-white shadow-lg rounded-2xl p-6 mb-8 max-w-md space-y-3">
-                <li>👥 Create group or rotating savings pools</li>
-                <li>📅 Automate contributions and payouts</li>
-                <li>🔍 Track contributions and balances in real time</li>
-            </ul>
+                <div className="grid md:grid-cols-2 gap-10 text-left">
+                    <div className="bg-gray-50 p-8 rounded-2xl shadow-sm border border-gray-200">
+                        <h2 className="text-2xl font-semibold mb-4 text-gray-900">👥 Group Savings Made Simple</h2>
+                        <p className="text-gray-600">
+                            Create and manage saving groups easily. Members contribute automatically based on
+                            your defined cycle — weekly, monthly, or quarterly.
+                        </p>
+                    </div>
 
-            <button
-                onClick={() => navigate("/create")}
-                className="bg-purple-600 text-white px-8 py-3 rounded-lg hover:bg-purple-700 transition"
-            >
-                Get Started
-            </button>
+                    <div className="bg-gray-50 p-8 rounded-2xl shadow-sm border border-gray-200">
+                        <h2 className="text-2xl font-semibold mb-4 text-gray-900">💳 Auto-Contribution System</h2>
+                        <p className="text-gray-600">
+                            Automate contributions so no one forgets to save. Every deposit is recorded
+                            transparently and visible to all group members.
+                        </p>
+                    </div>
+
+                    <div className="bg-gray-50 p-8 rounded-2xl shadow-sm border border-gray-200">
+                        <h2 className="text-2xl font-semibold mb-4 text-gray-900">📜 Transparent Recordkeeping</h2>
+                        <p className="text-gray-600">
+                            Every transaction and withdrawal is securely logged, preventing disputes and
+                            ensuring full trust within your community.
+                        </p>
+                    </div>
+
+                    <div className="bg-gray-50 p-8 rounded-2xl shadow-sm border border-gray-200">
+                        <h2 className="text-2xl font-semibold mb-4 text-gray-900">🎯 Goal-Based Saving</h2>
+                        <p className="text-gray-600">
+                            Set clear saving goals, monitor progress, and celebrate milestones together —
+                            turning financial discipline into shared success.
+                        </p>
+                    </div>
+                </div>
+
+                <div className="mt-16">
+                    <Link
+                        to="/create"
+                        className="px-10 py-4 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition text-lg"
+                    >
+                        Start a Community Savings Plan
+                    </Link>
+                </div>
+            </div>
         </div>
     );
 }
+
+export default Savings;
