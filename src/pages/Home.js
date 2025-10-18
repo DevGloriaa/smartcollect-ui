@@ -62,11 +62,6 @@ function Home() {
                     </Link>
                 </div>
             </section>
-
-            {/* Footer */}
-            <footer className="mt-20 text-sm text-gray-500 border-t border-gray-200 pt-6 w-full text-center">
-                © 2025 SmartCollect. All rights reserved.
-            </footer>
         </div>
     );
 }
