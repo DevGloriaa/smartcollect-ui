@@ -6,26 +6,24 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import Create from "./pages/Create";
 import Dashboard from "./pages/Dashboard";
-import Allowance from "./pages/Allowance";
 import Payment from "./pages/Payment";
 import Savings from "./pages/Savings";
+import Allowance from "./pages/Allowance";
 
-
-export default function App() {
+function App() {
     return (
         <Router>
-            <div className="flex flex-col min-h-screen">
+            <div className="flex flex-col min-h-screen bg-gray-50">
                 <Navbar />
-                <main className="flex-grow p-6">
+                <main className="flex-grow pt-20">
                     <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/about" element={<About />} />
                         <Route path="/create" element={<Create />} />
                         <Route path="/dashboard" element={<Dashboard />} />
-                        <Route path="/allowance" element={<Allowance />} />
                         <Route path="/payment" element={<Payment />} />
                         <Route path="/savings" element={<Savings />} />
-
+                        <Route path="/allowance" element={<Allowance />} />
                     </Routes>
                 </main>
                 <Footer />
@@ -33,3 +31,5 @@ export default function App() {
         </Router>
     );
 }
+
+export default App;

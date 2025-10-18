@@ -1,0 +1,257 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+:root {
+    --primary: #00524e;
+    --secondary: #00a896;
+    --text-dark: #1a1a1a;
+    --bg-light: #f2f5f7;
+    --hover: #007e75;
+}
+
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 5%;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.logo {
+    font-weight: 700;
+    color: var(--primary);
+    font-size: 1.6rem;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--text-dark);
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: var(--primary);
+}
+
+/* Hero Section */
+.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4rem 5%;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.hero-text {
+    flex: 1 1 400px;
+    max-width: 500px;
+}
+
+.hero-text h1 {
+    font-size: 2.8rem;
+    color: var(--text-dark);
+    line-height: 1.2;
+}
+
+.hero-text h1 span {
+    color: var(--primary);
+}
+
+.hero-text p {
+    margin: 1rem 0 2rem;
+    line-height: 1.6;
+    font-size: 1.05rem;
+}
+
+.cta-btn {
+    background-color: var(--primary);
+    color: white;
+    padding: 0.9rem 1.8rem;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.3s ease;
+}
+
+.cta-btn:hover {
+    background-color: var(--hover);
+}
+
+.hero-image {
+    flex: 1 1 400px;
+    text-align: center;
+}
+
+.hero-image img {
+    width: 100%;
+    max-width: 420px;
+    border-radius: 20px;
+}
+
+/* Features */
+.features {
+    text-align: center;
+    padding: 4rem 5%;
+    background: white;
+}
+
+.features h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: var(--primary);
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.feature-card {
+    background: var(--bg-light);
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: left;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.feature-card h3 {
+    color: var(--primary);
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+
+.feature-card p {
+    line-height: 1.6;
+}
+
+.learn-btn {
+    display: inline-block;
+    margin-top: 1rem;
+    text-decoration: none;
+    color: var(--secondary);
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.learn-btn:hover {
+    color: var(--hover);
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 1.5rem;
+    background: white;
+    font-size: 0.9rem;
+    color: #555;
+    margin-top: 3rem;
+}
+
+/* =====================
+   RESPONSIVE DESIGN
+===================== */
+
+@media (max-width: 1024px) {
+    .hero {
+        flex-direction: column-reverse;
+        text-align: center;
+    }
+
+    .hero-text {
+        max-width: 600px;
+    }
+
+    .hero-text h1 {
+        font-size: 2.3rem;
+    }
+
+    .hero-text p {
+        font-size: 1rem;
+    }
+
+    .cta-btn {
+        display: inline-block;
+        margin: 0 auto;
+    }
+
+    .hero-image img {
+        max-width: 340px;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.8rem;
+    }
+
+    .nav-links {
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .hero-text h1 {
+        font-size: 2rem;
+    }
+
+    .feature-card {
+        padding: 1.6rem;
+    }
+
+    .features h2 {
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero {
+        padding: 3rem 1.5rem;
+    }
+
+    .hero-text h1 {
+        font-size: 1.7rem;
+    }
+
+    .hero-text p {
+        font-size: 0.95rem;
+    }
+
+    .cta-btn {
+        padding: 0.8rem 1.6rem;
+        font-size: 0.9rem;
+    }
+
+    .feature-grid {
+        gap: 1.5rem;
+    }
+
+    .feature-card h3 {
+        font-size: 1.1rem;
+    }
+}
