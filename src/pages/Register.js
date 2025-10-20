@@ -1,62 +1,128 @@
 import React, { useState } from "react";
-import "../styles/Theme.css";
+import { useNavigate, Link } from "react-router-dom";
 
 function Register() {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
-        name: "",
+        fullName: "",
         email: "",
         password: "",
     });
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
-    const handleChange = e => {
+    const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = async e => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const res = await fetch("http://localhost:8003/api/users/register", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(formData),
-        });
-        const data = await res.json();
-        console.log(data);
+        setError("");
+        setLoading(true);
+
+        if (!formData.fullName || !formData.email || !formData.password) {
+            setError("All fields are required");
+            setLoading(false);
+            return;
+        }
+
+        try {
+            const response = await fetch(
+                "http://localhost:8003/api/users/reister",
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(formData),
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                setError(data.message || "Registration failed");
+                setLoading(false);
+                return;
+            }
+
+            navigate("/otp", { state: { email: formData.email } });
+        } catch (err) {
+            console.error(err);
+            setError("Something went wrong. Please try again.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
-        <div className="form-container">
-            <form className="form-card" onSubmit={handleSubmit}>
-                <h2 className="form-title">Register</h2>
+        <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+            <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow-lg">
+                <h2 className="text-3xl font-bold text-[#00524e] mb-6 text-center">
+                    Create Account
+                </h2>
 
-                <input
-                    type="text"
-                    name="name"
-                    placeholder="Full Name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="form-input"
-                />
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="form-input"
-                />
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    className="form-input"
-                />
+                {error && (
+                    <p className="text-red-600 text-center mb-4 font-medium">{error}</p>
+                )}
 
-                <button type="submit" className="cta-btn w-full mt-4">
-                    Register
-                </button>
-            </form>
+                <form onSubmit={handleSubmit} className="space-y-5">
+                    <div>
+                        <label className="block mb-1 font-medium text-gray-700">
+                            Full Name
+                        </label>
+                        <input
+                            type="text"
+                            name="fullName"
+                            value={formData.fullName}
+                            onChange={handleChange}
+                            placeholder="John Doe"
+                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block mb-1 font-medium text-gray-700">
+                            Email
+                        </label>
+                        <input
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            placeholder="you@example.com"
+                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block mb-1 font-medium text-gray-700">
+                            Password
+                        </label>
+                        <input
+                            type="password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            placeholder="••••••••"
+                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
+                        />
+                    </div>
+
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className="w-full py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition"
+                    >
+                        {loading ? "Registering..." : "Register"}
+                    </button>
+                </form>
+
+                <p className="mt-6 text-center text-gray-600">
+                    Already have an account?{" "}
+                    <Link to="/login" className="text-green-600 font-semibold hover:text-green-700">
+                        Login
+                    </Link>
+                </p>
+            </div>
         </div>
     );
 }
