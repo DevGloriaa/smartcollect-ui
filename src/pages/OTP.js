@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/theme.css";
+import "../styles/Theme.css";
 
 function OTP() {
     const [otp, setOtp] = useState("");
