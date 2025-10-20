@@ -14,7 +14,7 @@ function Home() {
                     from allowances to salary automation and group savings. Secure. Seamless. Smart.
                 </p>
                 <Link
-                    // to=""
+                    to="/register"
                     className="px-8 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition"
                 >
                     Get Started
