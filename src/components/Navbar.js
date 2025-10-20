@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
-function Navbar() {
+function Navbar({ isLoggedIn = false }) {
     const location = useLocation();
 
     const links = [
@@ -9,7 +9,6 @@ function Navbar() {
         { name: "Smart Allowance", path: "/allowance" },
         { name: "Employee Payments", path: "/payment" },
         { name: "Community Savings", path: "/savings" },
-        { name: "Dashboard", path: "/dashboard" },
     ];
 
     return (
@@ -33,14 +32,30 @@ function Navbar() {
                             {link.name}
                         </Link>
                     ))}
+
+                    {/* Dashboard only if logged in */}
+                    {isLoggedIn && (
+                        <Link
+                            to="/dashboard"
+                            className={`font-medium transition-colors ${
+                                location.pathname === "/dashboard"
+                                    ? "text-[#00a896]"
+                                    : "text-gray-700 hover:text-[#00524e]"
+                            }`}
+                        >
+                            Dashboard
+                        </Link>
+                    )}
                 </div>
 
-                <Link
-                    to="/create"
-                    className="hidden md:inline-block bg-[#00524e] text-white px-5 py-2 rounded-full hover:bg-[#007e75] transition"
-                >
-                    Get Started
-                </Link>
+                {!isLoggedIn && (
+                    <Link
+                        to="/register"
+                        className="hidden md:inline-block bg-[#00524e] text-white px-5 py-2 rounded-full hover:bg-[#007e75] transition"
+                    >
+                        Get Started
+                    </Link>
+                )}
             </div>
         </nav>
     );
