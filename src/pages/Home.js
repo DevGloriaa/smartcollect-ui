@@ -5,6 +5,7 @@ function Home() {
     return (
         <div className="flex flex-col items-center justify-center px-6 md:px-20 py-16 bg-white text-gray-800">
 
+
             <section className="text-center mb-20 max-w-3xl">
                 <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 mb-6 leading-tight">
                     Simplify Your Finances with <span className="text-green-600">SmartCollect</span>
@@ -21,6 +22,7 @@ function Home() {
                 </Link>
             </section>
 
+            {/* Features Section */}
             <section className="grid grid-cols-1 md:grid-cols-3 gap-10 w-full max-w-6xl mt-10">
 
                 <div className="p-8 border border-gray-200 rounded-2xl hover:shadow-xl transition bg-white">
@@ -61,6 +63,7 @@ function Home() {
                         Learn More →
                     </Link>
                 </div>
+
             </section>
         </div>
     );
