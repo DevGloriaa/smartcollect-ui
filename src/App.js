@@ -9,6 +9,9 @@ import Dashboard from "./pages/Dashboard";
 import Payment from "./pages/Payment";
 import Savings from "./pages/Savings";
 import Allowance from "./pages/Allowance";
+import Register from "./pages/Register";
+import Login from "./pages/Login";
+import OTP from "./pages/OTP";
 
 function App() {
     return (
@@ -24,6 +27,10 @@ function App() {
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/create" element={<Create />} />
                         <Route path="/about" element={<About />} />
+                        <Route path="/register" element={<Register />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/otp" element={<OTP />} />
+
                     </Routes>
                 </main>
                 <Footer />
