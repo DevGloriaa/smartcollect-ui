@@ -40,6 +40,9 @@ function Login() {
                 return;
             }
 
+            // ✅ Save token to localStorage
+            localStorage.setItem("token", data.token);
+
             navigate("/dashboard");
         } catch (err) {
             console.error(err);
