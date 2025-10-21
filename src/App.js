@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -12,29 +12,49 @@ import Allowance from "./pages/Allowance";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import OTP from "./pages/OTP";
+import ProtectedRoute from "./components/ProtectedRoute";
+
+
+function AppLayout() {
+    const location = useLocation();
+
+
+    const hideLayout = location.pathname === "/dashboard";
+
+    return (
+        <div className="flex flex-col min-h-screen bg-gray-50">
+            {!hideLayout && <Navbar />}
+            <main className={`flex-grow ${!hideLayout ? "pt-20" : ""}`}>
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/allowance" element={<Allowance />} />
+                    <Route path="/payment" element={<Payment />} />
+                    <Route path="/savings" element={<Savings />} />
+                    <Route path="/create" element={<Create />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/otp" element={<OTP />} />
+
+                    <Route
+                        path="/dashboard"
+                        element={
+                            <ProtectedRoute>
+                                <Dashboard />
+                            </ProtectedRoute>
+                        }
+                    />
+                </Routes>
+            </main>
+            {!hideLayout && <Footer />}
+        </div>
+    );
+}
 
 function App() {
     return (
         <Router>
-            <div className="flex flex-col min-h-screen bg-gray-50">
-                <Navbar />
-                <main className="flex-grow pt-20">
-                    <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/allowance" element={<Allowance />} />
-                        <Route path="/payment" element={<Payment />} />
-                        <Route path="/savings" element={<Savings />} />
-                        <Route path="/dashboard" element={<Dashboard />} />
-                        <Route path="/create" element={<Create />} />
-                        <Route path="/about" element={<About />} />
-                        <Route path="/register" element={<Register />} />
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/otp" element={<OTP />} />
-
-                    </Routes>
-                </main>
-                <Footer />
-            </div>
+            <AppLayout />
         </Router>
     );
 }
