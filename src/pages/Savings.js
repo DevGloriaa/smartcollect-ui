@@ -1,7 +1,28 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 function Savings() {
+    const navigate = useNavigate();
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    useEffect(() => {
+
+        const user = localStorage.getItem("user");
+        if (user) {
+            setIsAuthenticated(true);
+        }
+    }, []);
+
+    const handleGetStarted = () => {
+        if (!isAuthenticated) {
+
+            navigate("/login");
+        } else {
+
+            navigate("/community-dashboard");
+        }
+    };
+
     return (
         <div className="flex flex-col items-center justify-center px-6 md:px-20 py-16 bg-white text-gray-800">
             <div className="max-w-4xl w-full text-center">
@@ -49,12 +70,12 @@ function Savings() {
                 </div>
 
                 <div className="mt-16">
-                    <Link
-                        to="/create"
+                    <button
+                        onClick={handleGetStarted}
                         className="px-10 py-4 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition text-lg"
                     >
-                        Start a Community Savings Plan
-                    </Link>
+                        Get Started
+                    </button>
                 </div>
             </div>
         </div>
