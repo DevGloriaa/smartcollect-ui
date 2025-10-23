@@ -13,6 +13,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import OTP from "./pages/OTP";
 import ProtectedRoute from "./components/ProtectedRoute";
+import CommunityDashboard from "./pages/CommunityDashboard";
 
 
 function AppLayout() {
@@ -35,6 +36,7 @@ function AppLayout() {
                     <Route path="/register" element={<Register />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/otp" element={<OTP />} />
+                    <Route path="/community-dashboard" element={<CommunityDashboard />} />
 
                     <Route
                         path="/dashboard"
