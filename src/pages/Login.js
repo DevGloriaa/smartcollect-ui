@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 
 function Login() {
     const navigate = useNavigate();
+    const location = useLocation();
+
     const [formData, setFormData] = useState({
         email: "",
         password: "",
@@ -42,8 +44,11 @@ function Login() {
 
 
             localStorage.setItem("token", data.token);
+            localStorage.setItem("isLoggedIn", "true");
 
-            navigate("/dashboard");
+
+            const from = location.state?.from || "/dashboard";
+            navigate(from, { replace: true });
         } catch (err) {
             console.error(err);
             setError("Something went wrong. Please try again.");
