@@ -14,13 +14,13 @@ function Allowance() {
         const token = localStorage.getItem("token");
 
         if (!token) {
-
-            localStorage.setItem("redirectAfterLogin", "/allowance-dashboard");
+            localStorage.setItem("redirectAfterLogin", "/smart-allowance-dashboard");
             navigate("/login");
         } else {
-            navigate("/allowance-dashboard");
+            navigate("/smart-allowance-dashboard");
         }
     };
+
 
     return (
         <div className="flex flex-col items-center justify-center px-6 md:px-20 py-16 bg-white text-gray-800">

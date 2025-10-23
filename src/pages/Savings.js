@@ -14,7 +14,7 @@ function Savings() {
         const token = localStorage.getItem("token");
 
         if (!token) {
-            // Save redirect destination for after login
+            // ✅ Save redirect path so user returns to community dashboard after login
             localStorage.setItem("redirectAfterLogin", "/community-dashboard");
             navigate("/login");
         } else {
@@ -36,7 +36,6 @@ function Savings() {
                 </p>
 
                 <div className="grid md:grid-cols-2 gap-10 text-left">
-                    {/* Feature 1 */}
                     <div className="bg-gray-50 p-8 rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition">
                         <h2 className="text-2xl font-semibold mb-4 text-gray-900">
                             👥 Group Savings Made Simple
@@ -48,7 +47,6 @@ function Savings() {
                         </p>
                     </div>
 
-                    {/* Feature 2 */}
                     <div className="bg-gray-50 p-8 rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition">
                         <h2 className="text-2xl font-semibold mb-4 text-gray-900">
                             💳 Auto-Contribution System
@@ -59,7 +57,6 @@ function Savings() {
                         </p>
                     </div>
 
-                    {/* Feature 3 */}
                     <div className="bg-gray-50 p-8 rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition">
                         <h2 className="text-2xl font-semibold mb-4 text-gray-900">
                             📜 Transparent Recordkeeping
@@ -70,7 +67,6 @@ function Savings() {
                         </p>
                     </div>
 
-                    {/* Feature 4 */}
                     <div className="bg-gray-50 p-8 rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition">
                         <h2 className="text-2xl font-semibold mb-4 text-gray-900">
                             🎯 Goal-Based Saving

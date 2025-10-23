@@ -46,14 +46,15 @@ function Login() {
             localStorage.setItem("token", data.token);
             localStorage.setItem("isLoggedIn", "true");
 
-            // ✅ Determine redirect route
-            const storedRedirect = localStorage.getItem("redirectAfterLogin");
-            const from = storedRedirect || location.state?.from || "/dashboard";
+            // ✅ Determine where to go after login
+            const redirectPath =
+                localStorage.getItem("redirectAfterLogin") ||
+                location.state?.from?.pathname ||
+                "/dashboard";
 
-            // ✅ Clear saved redirect path after using it
             localStorage.removeItem("redirectAfterLogin");
 
-            navigate(from, { replace: true });
+            navigate(redirectPath, { replace: true });
         } catch (err) {
             console.error(err);
             setError("Something went wrong. Please try again.");

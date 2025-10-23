@@ -19,14 +19,15 @@ import Login from "./pages/Login";
 import OTP from "./pages/OTP";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CommunityDashboard from "./pages/CommunityDashboard";
+import SmartAllowanceDashboard from "./pages/SmartAllowanceDashboard"; // ✅ import this
 
 function AppLayout() {
     const location = useLocation();
 
-    // Hide Navbar and Footer for dashboard & community dashboard
     const hideLayout =
         location.pathname === "/dashboard" ||
-        location.pathname === "/community-dashboard";
+        location.pathname === "/community-dashboard" ||
+        location.pathname === "/smart-allowance-dashboard"; // ✅ add this
 
     return (
         <div className="flex flex-col min-h-screen bg-gray-50">
@@ -43,6 +44,7 @@ function AppLayout() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/otp" element={<OTP />} />
 
+                    {/* Protected Routes */}
                     <Route
                         path="/dashboard"
                         element={
@@ -57,6 +59,16 @@ function AppLayout() {
                         element={
                             <ProtectedRoute>
                                 <CommunityDashboard />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    {/* ✅ New Smart Allowance route */}
+                    <Route
+                        path="/smart-allowance-dashboard"
+                        element={
+                            <ProtectedRoute>
+                                <SmartAllowanceDashboard />
                             </ProtectedRoute>
                         }
                     />
