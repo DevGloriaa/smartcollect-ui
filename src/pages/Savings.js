@@ -6,18 +6,16 @@ function Savings() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
-        const user = localStorage.getItem("isLoggedIn");
-        if (user) {
-            setIsAuthenticated(true);
-        }
+        const token = localStorage.getItem("token"); // Use token, not isLoggedIn
+        if (token) setIsAuthenticated(true);
     }, []);
 
     const handleGetStarted = () => {
         if (!isAuthenticated) {
-            // If not logged in, send them to login and remember destination
-            navigate("/login", { state: { from: "/community-dashboard" } });
+            // Remember destination for after login
+            localStorage.setItem("redirectAfterLogin", "/community-dashboard");
+            navigate("/login");
         } else {
-            // If logged in, go straight to the dashboard
             navigate("/community-dashboard");
         }
     };
@@ -29,9 +27,10 @@ function Savings() {
                     Community Savings
                 </h1>
                 <p className="text-lg text-gray-600 mb-10 leading-relaxed">
-                    Empower your community or team to save together. SmartCollect’s Community Savings feature
-                    lets you create transparent, automated, and goal-oriented savings groups — fostering
-                    trust, growth, and collaboration.
+                    Empower your community or team to save together. SmartCollect’s
+                    Community Savings feature lets you create transparent, automated, and
+                    goal-oriented savings groups — fostering trust, growth, and
+                    collaboration.
                 </p>
 
                 <div className="grid md:grid-cols-2 gap-10 text-left">
@@ -40,8 +39,9 @@ function Savings() {
                             👥 Group Savings Made Simple
                         </h2>
                         <p className="text-gray-600">
-                            Create and manage saving groups easily. Members contribute automatically based on
-                            your defined cycle — weekly, monthly, or quarterly.
+                            Create and manage saving groups easily. Members contribute
+                            automatically based on your defined cycle — weekly, monthly, or
+                            quarterly.
                         </p>
                     </div>
 
@@ -50,8 +50,8 @@ function Savings() {
                             💳 Auto-Contribution System
                         </h2>
                         <p className="text-gray-600">
-                            Automate contributions so no one forgets to save. Every deposit is recorded
-                            transparently and visible to all group members.
+                            Automate contributions so no one forgets to save. Every deposit is
+                            recorded transparently and visible to all group members.
                         </p>
                     </div>
 
@@ -60,8 +60,8 @@ function Savings() {
                             📜 Transparent Recordkeeping
                         </h2>
                         <p className="text-gray-600">
-                            Every transaction and withdrawal is securely logged, preventing disputes and
-                            ensuring full trust within your community.
+                            Every transaction and withdrawal is securely logged, preventing
+                            disputes and ensuring full trust within your community.
                         </p>
                     </div>
 
@@ -70,8 +70,8 @@ function Savings() {
                             🎯 Goal-Based Saving
                         </h2>
                         <p className="text-gray-600">
-                            Set clear saving goals, monitor progress, and celebrate milestones together —
-                            turning financial discipline into shared success.
+                            Set clear saving goals, monitor progress, and celebrate milestones
+                            together — turning financial discipline into shared success.
                         </p>
                     </div>
                 </div>

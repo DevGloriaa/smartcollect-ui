@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+    useLocation,
+} from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -15,12 +20,13 @@ import OTP from "./pages/OTP";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CommunityDashboard from "./pages/CommunityDashboard";
 
-
 function AppLayout() {
     const location = useLocation();
 
-
-    const hideLayout = location.pathname === "/dashboard";
+    // Hide Navbar and Footer for dashboard & community dashboard
+    const hideLayout =
+        location.pathname === "/dashboard" ||
+        location.pathname === "/community-dashboard";
 
     return (
         <div className="flex flex-col min-h-screen bg-gray-50">
@@ -36,13 +42,21 @@ function AppLayout() {
                     <Route path="/register" element={<Register />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/otp" element={<OTP />} />
-                    <Route path="/community-dashboard" element={<CommunityDashboard />} />
 
                     <Route
                         path="/dashboard"
                         element={
                             <ProtectedRoute>
                                 <Dashboard />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/community-dashboard"
+                        element={
+                            <ProtectedRoute>
+                                <CommunityDashboard />
                             </ProtectedRoute>
                         }
                     />
