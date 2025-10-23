@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
 
-// ✅ Paste your ABI here
+
 const CONTRACT_ABI = [
     {
         "inputs": [],
@@ -59,7 +59,7 @@ const CONTRACT_ABI = [
     }
 ];
 
-// ✅ 
+
 const CONTRACT_ADDRESS = "0x0165878A594ca255338adfa4d48449f69242Eb8F";
 
 const EmployeePaymentDashboard = () => {

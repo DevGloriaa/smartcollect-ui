@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
 
-
 const CONTRACT_ADDRESS = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707";
 
 const CONTRACT_ABI = [
@@ -23,7 +22,6 @@ const CommunityDashboard = () => {
     const [admin, setAdmin] = useState("");
     const [amount, setAmount] = useState("");
     const [loading, setLoading] = useState(false);
-
 
     const connectWallet = async () => {
         try {
@@ -47,7 +45,6 @@ const CommunityDashboard = () => {
         }
     };
 
-
     const getGroupData = async () => {
         if (!contract || !account) return;
         try {
@@ -62,7 +59,6 @@ const CommunityDashboard = () => {
             console.error("Failed to fetch group data:", err);
         }
     };
-
 
     const handleJoinGroup = async () => {
         if (!contract) return;
@@ -79,7 +75,6 @@ const CommunityDashboard = () => {
             getGroupData();
         }
     };
-
 
     const handleContribute = async (e) => {
         e.preventDefault();
@@ -100,7 +95,6 @@ const CommunityDashboard = () => {
         }
     };
 
-
     const handleWithdraw = async () => {
         const amount = prompt("Enter amount (in ETH) to withdraw:");
         if (!amount || parseFloat(amount) <= 0) return;
@@ -119,7 +113,6 @@ const CommunityDashboard = () => {
         }
     };
 
-
     const handleRefresh = async () => {
         await getGroupData();
         alert("Data refreshed ✅");
@@ -130,21 +123,19 @@ const CommunityDashboard = () => {
     }, []);
 
     useEffect(() => {
-        if (contract && account) {
-            getGroupData();
-        }
+        if (contract && account) getGroupData();
     }, [contract, account]);
 
     return (
-        <div className="min-h-screen bg-gray-50 p-6">
-            <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg p-8">
-                <h1 className="text-3xl font-bold text-[#00524e] mb-6 text-center">
+        <div className="min-h-screen bg-gray-50 p-4 sm:p-6 md:p-8 lg:p-12">
+            <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-6 sm:p-8 md:p-10">
+                <h1 className="text-2xl sm:text-3xl md:text-3xl font-bold text-[#00524e] mb-6 text-center">
                     💰 Community Savings Dashboard
                 </h1>
 
-                <div className="mb-6">
+                <div className="mb-6 text-center">
                     {account ? (
-                        <p className="text-green-600 font-medium">
+                        <p className="text-green-600 font-medium break-words">
                             ✅ Wallet Connected <br />
                             <span className="text-gray-600 text-sm">{account}</span>
                         </p>
@@ -160,22 +151,22 @@ const CommunityDashboard = () => {
 
                 <div className="space-y-4">
                     {/* 👥 My Group */}
-                    <div className="bg-green-50 p-4 rounded-lg">
+                    <div className="bg-green-50 p-4 sm:p-6 rounded-lg">
                         <h3 className="font-semibold text-gray-700 mb-1">👥 My Group</h3>
                         <p>Join your community savings group and start contributing together.</p>
                         <button
                             onClick={handleJoinGroup}
                             disabled={loading}
-                            className="mt-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                            className="mt-2 w-full sm:w-auto bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
                         >
                             {loading ? "Processing..." : "Join Group"}
                         </button>
                     </div>
 
                     {/* 💸 Contribute */}
-                    <div className="bg-green-50 p-4 rounded-lg">
+                    <div className="bg-green-50 p-4 sm:p-6 rounded-lg">
                         <h3 className="font-semibold text-gray-700 mb-1">💸 Contribute</h3>
-                        <form onSubmit={handleContribute} className="flex gap-3 mt-2">
+                        <form onSubmit={handleContribute} className="flex flex-col sm:flex-row gap-3 mt-2">
                             <input
                                 type="number"
                                 value={amount}
@@ -195,7 +186,7 @@ const CommunityDashboard = () => {
                     </div>
 
                     {/* 📊 Transparency Report */}
-                    <div className="bg-green-50 p-4 rounded-lg">
+                    <div className="bg-green-50 p-4 sm:p-6 rounded-lg">
                         <h3 className="font-semibold text-gray-700 mb-1">📊 Transparency Report</h3>
                         <p>Total Group Balance: <b>{balance}</b> ETH</p>
                         <p>Total Savings: <b>{totalSavings}</b> ETH</p>
@@ -210,13 +201,13 @@ const CommunityDashboard = () => {
 
                     {/* ⚙️ Admin Controls */}
                     {account.toLowerCase() === admin.toLowerCase() && (
-                        <div className="bg-red-50 p-4 rounded-lg">
+                        <div className="bg-red-50 p-4 sm:p-6 rounded-lg">
                             <h3 className="font-semibold text-gray-700 mb-2">⚙️ Admin Controls</h3>
                             <p>You are the group admin. You can withdraw from the community pool.</p>
                             <button
                                 onClick={handleWithdraw}
                                 disabled={loading}
-                                className="mt-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
+                                className="mt-2 w-full sm:w-auto bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
                             >
                                 {loading ? "Processing..." : "Withdraw Funds"}
                             </button>
