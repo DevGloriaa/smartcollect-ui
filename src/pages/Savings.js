@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Savings() {
     const navigate = useNavigate();
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
-
-        const user = localStorage.getItem("user");
+        const user = localStorage.getItem("isLoggedIn");
         if (user) {
             setIsAuthenticated(true);
         }
@@ -15,10 +14,10 @@ function Savings() {
 
     const handleGetStarted = () => {
         if (!isAuthenticated) {
-
-            navigate("/login");
+            // If not logged in, send them to login and remember destination
+            navigate("/login", { state: { from: "/community-dashboard" } });
         } else {
-
+            // If logged in, go straight to the dashboard
             navigate("/community-dashboard");
         }
     };
@@ -37,7 +36,9 @@ function Savings() {
 
                 <div className="grid md:grid-cols-2 gap-10 text-left">
                     <div className="bg-gray-50 p-8 rounded-2xl shadow-sm border border-gray-200">
-                        <h2 className="text-2xl font-semibold mb-4 text-gray-900">👥 Group Savings Made Simple</h2>
+                        <h2 className="text-2xl font-semibold mb-4 text-gray-900">
+                            👥 Group Savings Made Simple
+                        </h2>
                         <p className="text-gray-600">
                             Create and manage saving groups easily. Members contribute automatically based on
                             your defined cycle — weekly, monthly, or quarterly.
@@ -45,7 +46,9 @@ function Savings() {
                     </div>
 
                     <div className="bg-gray-50 p-8 rounded-2xl shadow-sm border border-gray-200">
-                        <h2 className="text-2xl font-semibold mb-4 text-gray-900">💳 Auto-Contribution System</h2>
+                        <h2 className="text-2xl font-semibold mb-4 text-gray-900">
+                            💳 Auto-Contribution System
+                        </h2>
                         <p className="text-gray-600">
                             Automate contributions so no one forgets to save. Every deposit is recorded
                             transparently and visible to all group members.
@@ -53,7 +56,9 @@ function Savings() {
                     </div>
 
                     <div className="bg-gray-50 p-8 rounded-2xl shadow-sm border border-gray-200">
-                        <h2 className="text-2xl font-semibold mb-4 text-gray-900">📜 Transparent Recordkeeping</h2>
+                        <h2 className="text-2xl font-semibold mb-4 text-gray-900">
+                            📜 Transparent Recordkeeping
+                        </h2>
                         <p className="text-gray-600">
                             Every transaction and withdrawal is securely logged, preventing disputes and
                             ensuring full trust within your community.
@@ -61,7 +66,9 @@ function Savings() {
                     </div>
 
                     <div className="bg-gray-50 p-8 rounded-2xl shadow-sm border border-gray-200">
-                        <h2 className="text-2xl font-semibold mb-4 text-gray-900">🎯 Goal-Based Saving</h2>
+                        <h2 className="text-2xl font-semibold mb-4 text-gray-900">
+                            🎯 Goal-Based Saving
+                        </h2>
                         <p className="text-gray-600">
                             Set clear saving goals, monitor progress, and celebrate milestones together —
                             turning financial discipline into shared success.
