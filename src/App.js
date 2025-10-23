@@ -19,7 +19,8 @@ import Login from "./pages/Login";
 import OTP from "./pages/OTP";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CommunityDashboard from "./pages/CommunityDashboard";
-import SmartAllowanceDashboard from "./pages/SmartAllowanceDashboard"; // ✅ import this
+import SmartAllowanceDashboard from "./pages/SmartAllowanceDashboard";
+import EmployeePaymentDashboard from "./pages/EmployeePaymentDashboard";
 
 function AppLayout() {
     const location = useLocation();
@@ -27,7 +28,8 @@ function AppLayout() {
     const hideLayout =
         location.pathname === "/dashboard" ||
         location.pathname === "/community-dashboard" ||
-        location.pathname === "/smart-allowance-dashboard"; // ✅ add this
+        location.pathname === "/smart-allowance-dashboard" ||
+        location.pathname === "/employee-payment-dashboard"; // ✅ added this
 
     return (
         <div className="flex flex-col min-h-screen bg-gray-50">
@@ -43,6 +45,7 @@ function AppLayout() {
                     <Route path="/register" element={<Register />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/otp" element={<OTP />} />
+                    <Route path="/employee-payment-dashboard" element={<EmployeePaymentDashboard />} />
 
                     {/* Protected Routes */}
                     <Route
@@ -63,7 +66,7 @@ function AppLayout() {
                         }
                     />
 
-                    {/* ✅ New Smart Allowance route */}
+                    {/* ✅ Smart Allowance route */}
                     <Route
                         path="/smart-allowance-dashboard"
                         element={

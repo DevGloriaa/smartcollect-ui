@@ -59,8 +59,8 @@ const CONTRACT_ABI = [
     }
 ];
 
-// ✅ Replace with your deployed contract address
-const CONTRACT_ADDRESS = "0xYOUR_DEPLOYED_CONTRACT_ADDRESS";
+// ✅ 
+const CONTRACT_ADDRESS = "0x0165878A594ca255338adfa4d48449f69242Eb8F";
 
 const EmployeePaymentDashboard = () => {
     const [account, setAccount] = useState("");
@@ -108,7 +108,7 @@ const EmployeePaymentDashboard = () => {
         setLoading(false);
     };
 
-    // Pay Employee
+
     const handlePayEmployee = async (e) => {
         e.preventDefault();
         if (!employeeAddress) return;

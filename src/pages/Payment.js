@@ -50,7 +50,7 @@ function Payment() {
 
                 <div className="mt-16">
                     <Link
-                        to="/create"
+                        to="/employee-payment-dashboard"
                         className="px-10 py-4 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition text-lg"
                     >
                         Get Started with Employee Payments
