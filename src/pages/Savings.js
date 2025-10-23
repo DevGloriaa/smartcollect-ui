@@ -6,13 +6,15 @@ function Savings() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
-        const token = localStorage.getItem("token"); // Use token, not isLoggedIn
+        const token = localStorage.getItem("token");
         if (token) setIsAuthenticated(true);
     }, []);
 
     const handleGetStarted = () => {
-        if (!isAuthenticated) {
-            // Remember destination for after login
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            // Save redirect destination for after login
             localStorage.setItem("redirectAfterLogin", "/community-dashboard");
             navigate("/login");
         } else {
@@ -24,7 +26,7 @@ function Savings() {
         <div className="flex flex-col items-center justify-center px-6 md:px-20 py-16 bg-white text-gray-800">
             <div className="max-w-4xl w-full text-center">
                 <h1 className="text-5xl font-extrabold text-gray-900 mb-6">
-                    Community Savings
+                    💰 Community Savings
                 </h1>
                 <p className="text-lg text-gray-600 mb-10 leading-relaxed">
                     Empower your community or team to save together. SmartCollect’s
@@ -34,7 +36,8 @@ function Savings() {
                 </p>
 
                 <div className="grid md:grid-cols-2 gap-10 text-left">
-                    <div className="bg-gray-50 p-8 rounded-2xl shadow-sm border border-gray-200">
+                    {/* Feature 1 */}
+                    <div className="bg-gray-50 p-8 rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition">
                         <h2 className="text-2xl font-semibold mb-4 text-gray-900">
                             👥 Group Savings Made Simple
                         </h2>
@@ -45,7 +48,8 @@ function Savings() {
                         </p>
                     </div>
 
-                    <div className="bg-gray-50 p-8 rounded-2xl shadow-sm border border-gray-200">
+                    {/* Feature 2 */}
+                    <div className="bg-gray-50 p-8 rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition">
                         <h2 className="text-2xl font-semibold mb-4 text-gray-900">
                             💳 Auto-Contribution System
                         </h2>
@@ -55,7 +59,8 @@ function Savings() {
                         </p>
                     </div>
 
-                    <div className="bg-gray-50 p-8 rounded-2xl shadow-sm border border-gray-200">
+                    {/* Feature 3 */}
+                    <div className="bg-gray-50 p-8 rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition">
                         <h2 className="text-2xl font-semibold mb-4 text-gray-900">
                             📜 Transparent Recordkeeping
                         </h2>
@@ -65,7 +70,8 @@ function Savings() {
                         </p>
                     </div>
 
-                    <div className="bg-gray-50 p-8 rounded-2xl shadow-sm border border-gray-200">
+                    {/* Feature 4 */}
+                    <div className="bg-gray-50 p-8 rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition">
                         <h2 className="text-2xl font-semibold mb-4 text-gray-900">
                             🎯 Goal-Based Saving
                         </h2>

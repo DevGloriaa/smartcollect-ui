@@ -42,12 +42,17 @@ function Login() {
                 return;
             }
 
-
+            // ✅ Save login state
             localStorage.setItem("token", data.token);
             localStorage.setItem("isLoggedIn", "true");
 
+            // ✅ Determine redirect route
+            const storedRedirect = localStorage.getItem("redirectAfterLogin");
+            const from = storedRedirect || location.state?.from || "/dashboard";
 
-            const from = location.state?.from || "/dashboard";
+            // ✅ Clear saved redirect path after using it
+            localStorage.removeItem("redirectAfterLogin");
+
             navigate(from, { replace: true });
         } catch (err) {
             console.error(err);
