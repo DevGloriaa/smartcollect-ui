@@ -1,89 +1,173 @@
 import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
 
-function CommunityDashboard() {
-    const [account, setAccount] = useState(null);
-    const [error, setError] = useState("");
-    const [isConnected, setIsConnected] = useState(false);
+const CONTRACT_ADDRESS = "YOUR_DEPLOYED_CONTRACT_ADDRESS_HERE";
 
+const CONTRACT_ABI = [
+    {
+        "inputs": [],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "inputs": [],
+        "name": "contribute",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getGroupBalance",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "totalSavings",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "name": "contributions",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    }
+];
 
+const CommunityDashboard = () => {
+    const [account, setAccount] = useState("");
+    const [contract, setContract] = useState(null);
+    const [balance, setBalance] = useState("0");
+    const [myContribution, setMyContribution] = useState("0");
+    const [amount, setAmount] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    // Connect Wallet
     const connectWallet = async () => {
         try {
             if (!window.ethereum) {
-                setError("MetaMask not detected. Please install it.");
+                alert("Please install MetaMask first!");
                 return;
             }
 
-            const accounts = await window.ethereum.request({
-                method: "eth_requestAccounts",
-            });
+            const provider = new ethers.BrowserProvider(window.ethereum);
+            const accounts = await provider.send("eth_requestAccounts", []);
+            const signer = await provider.getSigner();
+            const contractInstance = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
 
             setAccount(accounts[0]);
-            setIsConnected(true);
-            setError("");
+            setContract(contractInstance);
         } catch (err) {
-            console.error(err);
-            setError("Failed to connect wallet.");
+            console.error("Wallet connection failed:", err);
+        }
+    };
+
+    const getGroupData = async () => {
+        if (!contract || !account) return;
+        try {
+            const total = await contract.getGroupBalance();
+            const myCont = await contract.contributions(account);
+
+            setBalance(ethers.formatEther(total));
+            setMyContribution(ethers.formatEther(myCont));
+        } catch (err) {
+            console.error("Failed to fetch group data:", err);
+        }
+    };
+
+    const handleContribute = async (e) => {
+        e.preventDefault();
+        if (!amount || !contract) return;
+        setLoading(true);
+
+        try {
+            const tx = await contract.contribute({ value: ethers.parseEther(amount) });
+            await tx.wait();
+            alert("Contribution successful!");
+            setAmount("");
+            getGroupData();
+        } catch (err) {
+            console.error("Contribution failed:", err);
+            alert("Transaction failed. Try again.");
+        } finally {
+            setLoading(false);
         }
     };
 
     useEffect(() => {
-        if (window.ethereum) {
-            window.ethereum.request({ method: "eth_accounts" }).then((accounts) => {
-                if (accounts.length > 0) {
-                    setAccount(accounts[0]);
-                    setIsConnected(true);
-                }
-            });
-        }
+        connectWallet();
     }, []);
 
+    useEffect(() => {
+        if (contract && account) {
+            getGroupData();
+        }
+    }, [contract, account]);
+
     return (
-        <div className="flex flex-col items-center justify-center px-6 md:px-20 py-16 bg-gray-50 text-gray-800 min-h-screen">
-            <div className="max-w-3xl w-full text-center">
-                <h1 className="text-4xl font-extrabold text-gray-900 mb-4">
+        <div className="min-h-screen bg-gray-50 p-6">
+            <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg p-8">
+                <h1 className="text-3xl font-bold text-[#00524e] mb-6 text-center">
                     💰 Community Savings Dashboard
                 </h1>
-                <p className="text-gray-600 mb-10">
-                    Manage your community’s shared savings — contribute, monitor goals, and view transparency reports.
-                </p>
 
-                {!isConnected ? (
-                    <button
-                        onClick={connectWallet}
-                        className="px-10 py-4 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition text-lg"
-                    >
-                        Connect Wallet
-                    </button>
-                ) : (
-                    <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
-                        <h2 className="text-2xl font-semibold mb-4">Wallet Connected ✅</h2>
-                        <p className="text-gray-700 break-all mb-6">
-                            <strong>Address:</strong> {account}
+                <div className="mb-6">
+                    {account ? (
+                        <p className="text-green-600 font-medium">
+                            ✅ Wallet Connected <br />
+                            <span className="text-gray-600 text-sm">{account}</span>
                         </p>
+                    ) : (
+                        <button
+                            onClick={connectWallet}
+                            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+                        >
+                            Connect Wallet
+                        </button>
+                    )}
+                </div>
 
-                        <div className="grid md:grid-cols-2 gap-6 text-left">
-                            <div className="bg-gray-100 p-6 rounded-xl shadow-sm border border-gray-200">
-                                <h3 className="text-lg font-semibold mb-2 text-gray-900">👥 My Group</h3>
-                                <p className="text-gray-600 text-sm">
-                                    View your current savings group, contributions, and members.
-                                </p>
-                            </div>
-
-                            <div className="bg-gray-100 p-6 rounded-xl shadow-sm border border-gray-200">
-                                <h3 className="text-lg font-semibold mb-2 text-gray-900">💸 Contribute</h3>
-                                <p className="text-gray-600 text-sm">
-                                    Add your savings contribution directly to the smart contract.
-                                </p>
-                            </div>
-                        </div>
+                <div className="space-y-4">
+                    <div className="bg-green-50 p-4 rounded-lg">
+                        <h3 className="font-semibold text-gray-700 mb-1">👥 My Group</h3>
+                        <p>View your current group, members, and contributions.</p>
                     </div>
-                )}
 
-                {error && <p className="text-red-500 mt-6">{error}</p>}
+                    <div className="bg-green-50 p-4 rounded-lg">
+                        <h3 className="font-semibold text-gray-700 mb-1">💸 Contribute</h3>
+                        <form onSubmit={handleContribute} className="flex gap-3 mt-2">
+                            <input
+                                type="number"
+                                value={amount}
+                                onChange={(e) => setAmount(e.target.value)}
+                                placeholder="Enter amount (ETH)"
+                                className="flex-1 border rounded-lg px-3 py-2"
+                                required
+                            />
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+                            >
+                                {loading ? "Processing..." : "Contribute"}
+                            </button>
+                        </form>
+                    </div>
+
+                    <div className="bg-green-50 p-4 rounded-lg">
+                        <h3 className="font-semibold text-gray-700 mb-1">📊 Transparency Report</h3>
+                        <p>Total Group Savings: <b>{balance}</b> ETH</p>
+                        <p>My Total Contribution: <b>{myContribution}</b> ETH</p>
+                    </div>
+                </div>
             </div>
         </div>
     );
-}
+};
 
 export default CommunityDashboard;
