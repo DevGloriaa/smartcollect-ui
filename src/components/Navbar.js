@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ThemeContext } from "../context/ThemeContext"; // ✅ Import ThemeContext
-import { SunIcon, MoonIcon } from "@heroicons/react/24/outline"; // optional, for icons
+import { ThemeContext } from "../context/ThemeContext";
+import { SunIcon, MoonIcon } from "@heroicons/react/24/outline";
 
 function Navbar({ isLoggedIn = false }) {
     const location = useLocation();
-    const { theme, toggleTheme } = useContext(ThemeContext); // ✅ Use the theme context
+    const { theme, toggleTheme } = useContext(ThemeContext);
 
     const links = [
         { name: "Home", path: "/" },
@@ -39,7 +39,6 @@ function Navbar({ isLoggedIn = false }) {
                         </Link>
                     ))}
 
-                    {/* Dashboard only if logged in */}
                     {isLoggedIn && (
                         <Link
                             to="/dashboard"
@@ -52,11 +51,13 @@ function Navbar({ isLoggedIn = false }) {
                             Dashboard
                         </Link>
                     )}
+                </div>
 
-                    {/* Theme Toggle Button */}
+                {/* ✅ Show theme toggle on ALL screen sizes */}
+                <div className="flex items-center space-x-4">
                     <button
                         onClick={toggleTheme}
-                        className="ml-4 p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-300"
+                        className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-300"
                         aria-label="Toggle Theme"
                     >
                         {theme === "light" ? (
@@ -65,16 +66,16 @@ function Navbar({ isLoggedIn = false }) {
                             <SunIcon className="w-5 h-5" />
                         )}
                     </button>
-                </div>
 
-                {!isLoggedIn && (
-                    <Link
-                        to="/register"
-                        className="hidden md:inline-block bg-[#00524e] dark:bg-[#00bfa5] text-white px-5 py-2 rounded-full hover:bg-[#007e75] dark:hover:bg-[#008e7c] transition-colors duration-300"
-                    >
-                        Get Started
-                    </Link>
-                )}
+                    {!isLoggedIn && (
+                        <Link
+                            to="/register"
+                            className="hidden md:inline-block bg-[#00524e] dark:bg-[#00bfa5] text-white px-5 py-2 rounded-full hover:bg-[#007e75] dark:hover:bg-[#008e7c] transition-colors duration-300"
+                        >
+                            Get Started
+                        </Link>
+                    )}
+                </div>
             </div>
         </nav>
     );

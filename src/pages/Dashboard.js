@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
 const summaryData = [
-    { title: "Total Savings", value: "₦1,200,000", color: "bg-green-100", textColor: "text-green-800" },
-    { title: "Allowances", value: "₦450,000", color: "bg-blue-100", textColor: "text-blue-800" },
-    { title: "Payments", value: "₦750,000", color: "bg-yellow-100", textColor: "text-yellow-800" },
-    { title: "Active Groups", value: "8", color: "bg-purple-100", textColor: "text-purple-800" },
+    { title: "Total Savings", value: "₦1,200,000", light: "bg-green-100 text-green-800", dark: "dark:bg-green-900 dark:text-green-200" },
+    { title: "Allowances", value: "₦450,000", light: "bg-blue-100 text-blue-800", dark: "dark:bg-blue-900 dark:text-blue-200" },
+    { title: "Payments", value: "₦750,000", light: "bg-yellow-100 text-yellow-800", dark: "dark:bg-yellow-900 dark:text-yellow-200" },
+    { title: "Active Groups", value: "8", light: "bg-purple-100 text-purple-800", dark: "dark:bg-purple-900 dark:text-purple-200" },
 ];
 
 const transactions = [
@@ -29,53 +29,67 @@ function Dashboard() {
     const navigate = useNavigate();
 
     return (
-        <div className="px-4 md:px-12 py-12 bg-gray-50 min-h-screen">
-            <h1 className="text-3xl md:text-4xl font-bold mb-8 text-gray-900">Dashboard</h1>
+        <div className="px-4 md:px-12 py-16 bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-300">
+            <h1 className="text-3xl md:text-4xl font-bold mb-8 text-gray-900 dark:text-white transition-colors duration-300">
+                Dashboard
+            </h1>
 
             {/* Summary Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-10">
                 {summaryData.map((item) => (
                     <div
                         key={item.title}
-                        className={`p-6 rounded-2xl shadow hover:shadow-lg transition ${item.color}`}
+                        className={`p-6 rounded-2xl shadow hover:shadow-lg transition shadow-gray-200 dark:shadow-black/50 ${item.light} ${item.dark}`}
                     >
-                        <p className={`text-sm font-medium ${item.textColor} mb-2`}>{item.title}</p>
-                        <p className="text-2xl md:text-3xl font-bold text-gray-900">{item.value}</p>
+                        <p className="text-sm font-medium mb-2">{item.title}</p>
+                        <p className="text-2xl md:text-3xl font-bold">{item.value}</p>
                     </div>
                 ))}
             </div>
 
             {/* Monthly Trends Chart */}
-            <div className="bg-white p-6 rounded-2xl shadow mb-10">
-                <h2 className="text-xl font-semibold mb-4 text-gray-900">Monthly Trends</h2>
-                <ResponsiveContainer width="100%" height={250}>
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow transition-colors duration-300 mb-10">
+                <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">
+                    Monthly Trends
+                </h2>
+                <ResponsiveContainer width="100%" height={260}>
                     <LineChart data={chartData}>
-                        <XAxis dataKey="month" stroke="#8884d8" />
-                        <YAxis stroke="#8884d8" />
-                        <Tooltip />
-                        <Line type="monotone" dataKey="Savings" stroke="#00a896" strokeWidth={3} />
+                        <XAxis dataKey="month" stroke="currentColor" className="text-gray-600 dark:text-gray-300" />
+                        <YAxis stroke="currentColor" className="text-gray-600 dark:text-gray-300" />
+                        <Tooltip
+                            contentStyle={{
+                                backgroundColor: "#1f2937",
+                                color: "#fff",
+                                borderRadius: "8px",
+                                border: "none",
+                            }}
+                            itemStyle={{ color: "#fff" }}
+                        />
+                        <Line type="monotone" dataKey="Savings" stroke="#00bfa5" strokeWidth={3} />
                         <Line type="monotone" dataKey="Payments" stroke="#00524e" strokeWidth={3} />
                     </LineChart>
                 </ResponsiveContainer>
             </div>
 
             {/* Recent Transactions */}
-            <div className="bg-white p-6 rounded-2xl shadow mb-10 overflow-x-auto">
-                <h2 className="text-xl font-semibold mb-4 text-gray-900">Recent Transactions</h2>
-                <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-100">
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow transition-colors duration-300 overflow-x-auto mb-10">
+                <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">
+                    Recent Transactions
+                </h2>
+                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                    <thead className="bg-gray-100 dark:bg-gray-700">
                     <tr>
-                        <th className="px-4 py-2 text-left text-gray-600">Type</th>
-                        <th className="px-4 py-2 text-left text-gray-600">Amount</th>
-                        <th className="px-4 py-2 text-left text-gray-600">Date</th>
+                        <th className="px-4 py-2 text-left text-gray-600 dark:text-gray-300">Type</th>
+                        <th className="px-4 py-2 text-left text-gray-600 dark:text-gray-300">Amount</th>
+                        <th className="px-4 py-2 text-left text-gray-600 dark:text-gray-300">Date</th>
                     </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-200">
+                    <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                     {transactions.map((tx) => (
                         <tr key={tx.id}>
-                            <td className="px-4 py-3 text-gray-700">{tx.type}</td>
-                            <td className="px-4 py-3 text-gray-700">{tx.amount}</td>
-                            <td className="px-4 py-3 text-gray-700">{tx.date}</td>
+                            <td className="px-4 py-3 text-gray-700 dark:text-gray-200">{tx.type}</td>
+                            <td className="px-4 py-3 text-gray-700 dark:text-gray-200">{tx.amount}</td>
+                            <td className="px-4 py-3 text-gray-700 dark:text-gray-200">{tx.date}</td>
                         </tr>
                     ))}
                     </tbody>
@@ -84,7 +98,9 @@ function Dashboard() {
 
             {/* Module Navigation */}
             <div className="mb-10">
-                <h2 className="text-2xl font-semibold mb-6 text-gray-900">Choose a Module</h2>
+                <h2 className="text-2xl font-semibold mb-6 text-gray-900 dark:text-gray-100">
+                    Choose a Module
+                </h2>
                 <div className="flex flex-col sm:flex-row gap-4">
                     <button
                         onClick={() => navigate("/smart-allowance-dashboard")}

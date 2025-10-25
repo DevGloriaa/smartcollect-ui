@@ -42,11 +42,9 @@ function Login() {
                 return;
             }
 
-            // ✅ Save login state
             localStorage.setItem("token", data.token);
             localStorage.setItem("isLoggedIn", "true");
 
-            // ✅ Determine where to go after login
             const redirectPath =
                 localStorage.getItem("redirectAfterLogin") ||
                 location.state?.from?.pathname ||
@@ -64,55 +62,62 @@ function Login() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-            <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow-lg">
-                <h2 className="text-3xl font-bold text-[#00524e] mb-6 text-center">
+        <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4 transition-colors duration-300">
+            <div className="max-w-md w-full bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg transition-colors duration-300">
+                <h2 className="text-3xl font-bold text-[#00524e] dark:text-green-400 mb-6 text-center transition-colors duration-300">
                     Login to SmartCollect
                 </h2>
 
                 {error && (
-                    <p className="text-red-600 text-center mb-4 font-medium">{error}</p>
+                    <p className="text-red-600 dark:text-red-400 text-center mb-4 font-medium">
+                        {error}
+                    </p>
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-5">
+
                     <div>
-                        <label className="block mb-1 font-medium text-gray-700">Email</label>
+                        <label className="block mb-1 font-medium text-gray-700 dark:text-gray-300">
+                            Email
+                        </label>
                         <input
                             type="email"
                             name="email"
                             value={formData.email}
                             onChange={handleChange}
                             placeholder="you@example.com"
-                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
+                            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-green-600 dark:focus:ring-green-500"
                         />
                     </div>
 
                     <div>
-                        <label className="block mb-1 font-medium text-gray-700">Password</label>
+                        <label className="block mb-1 font-medium text-gray-700 dark:text-gray-300">
+                            Password
+                        </label>
                         <input
                             type="password"
                             name="password"
                             value={formData.password}
                             onChange={handleChange}
                             placeholder="••••••••"
-                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
+                            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-green-600 dark:focus:ring-green-500"
                         />
                     </div>
 
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition"
+                        className="w-full py-3 bg-green-600 dark:bg-green-500 text-white font-semibold rounded-lg hover:bg-green-700 dark:hover:bg-green-600 transition-colors duration-300"
                     >
                         {loading ? "Logging in..." : "Login"}
                     </button>
                 </form>
 
-                <p className="mt-6 text-center text-gray-600">
+                <p className="mt-6 text-center text-gray-600 dark:text-gray-400 transition-colors duration-300">
                     Don't have an account?{" "}
                     <Link
                         to="/register"
-                        className="text-green-600 font-semibold hover:text-green-700"
+                        className="text-green-600 dark:text-green-400 font-semibold hover:text-green-700 dark:hover:text-green-300"
                     >
                         Register
                     </Link>
