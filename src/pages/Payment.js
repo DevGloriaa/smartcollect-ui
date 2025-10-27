@@ -70,7 +70,6 @@ function Payment() {
                     </div>
                 </div>
 
-                {/* CTA Button */}
                 <div className="mt-16">
                     <Link
                         to="/employee-payment-dashboard"

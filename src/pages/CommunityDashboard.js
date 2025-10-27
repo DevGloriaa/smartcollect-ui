@@ -3,7 +3,6 @@ import React, { useEffect, useState, useRef, useContext } from "react";
 import { ethers } from "ethers";
 import { ThemeContext } from "../context/ThemeContext";
 
-
 const CONTRACT_ADDRESS = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707";
 const CONTRACT_ABI = [
     "function joinGroup() external",
@@ -15,7 +14,7 @@ const CONTRACT_ABI = [
     "function totalSavings() external view returns (uint256)",
 ];
 
-/* ---------- small helpers ---------- */
+
 function ShortAddr({ address }) {
     if (!address) return null;
     return <span className="font-mono">{address.slice(0, 6)}...{address.slice(-4)}</span>;
@@ -34,19 +33,59 @@ function Toast({ toast, onClose }) {
     );
 }
 
-/* ---------- Header & Footer (embedded for single-file) ---------- */
-function Header({ wallet, onConnect, onCopy, onDisconnect, network }) {
+
+function Header({
+                    wallet,
+                    onConnect,
+                    onCopy,
+                    onDisconnect,
+                    onNavigate,
+                    network,
+                }) {
     const { theme, toggleTheme } = useContext(ThemeContext);
+
     return (
-        <header className="w-full bg-white dark:bg-gray-800 border-b dark:border-gray-700 sticky top-0 z-40">
-            <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-                <div className="flex items-center gap-4">
+        <header className="w-full bg-white dark:bg-gray-800 border-b dark:border-gray-700 sticky top-0 z-50">
+            <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+                <div className="flex items-center gap-6">
                     <div className="text-2xl font-bold text-[#00524e] dark:text-[#00bfa5]">SmartCollect</div>
-                    <div className="hidden md:block text-sm text-gray-600 dark:text-gray-300">Community Savings</div>
+
+                    <nav className="hidden sm:flex items-center gap-2">
+                        <button
+                            onClick={() => onNavigate("/smart-allowance-dashboard")}
+                            className="px-3 py-1 rounded-full bg-white/80 dark:bg-gray-700/60 hover:opacity-90 text-sm flex items-center gap-2"
+                        >
+                            <span className="text-lg">🏦</span>
+                            <span className="hidden md:inline">Smart Allowance</span>
+                        </button>
+
+                        <button
+                            onClick={() => onNavigate("/employee-payment-dashboard")}
+                            className="px-3 py-1 rounded-full bg-white/80 dark:bg-gray-700/60 hover:opacity-90 text-sm flex items-center gap-2"
+                        >
+                            <span className="text-lg">💼</span>
+                            <span className="hidden md:inline">Employee Payments</span>
+                        </button>
+
+                        <button
+                            onClick={() => onNavigate("/community")}
+                            className="px-3 py-1 rounded-full bg-green-600 text-white hover:bg-green-700 text-sm flex items-center gap-2"
+                        >
+                            <span className="text-lg">👥</span>
+                            <span className="hidden md:inline">Community Savings</span>
+                        </button>
+                    </nav>
+
                 </div>
 
                 <div className="flex items-center gap-3">
-                    <button onClick={toggleTheme} className="px-3 py-1 rounded bg-gray-100 dark:bg-gray-700 text-sm">{theme === "light" ? "Dark" : "Light"}</button>
+                    <button
+                        onClick={toggleTheme}
+                        className="px-3 py-1 rounded bg-gray-100 dark:bg-gray-700 text-sm"
+                        aria-label="Toggle theme"
+                    >
+                        {theme === "light" ? "Dark" : "Light"}
+                    </button>
 
                     <div className="bg-white dark:bg-gray-900 px-3 py-2 rounded-lg flex items-center gap-3 shadow-sm">
                         <div className="w-9 h-9 rounded-full bg-gradient-to-br from-gray-200 to-white dark:from-gray-700 dark:to-gray-800 flex items-center justify-center font-bold text-xs">
@@ -69,7 +108,6 @@ function Header({ wallet, onConnect, onCopy, onDisconnect, network }) {
         </header>
     );
 }
-
 function Footer() {
     return (
         <footer className="mt-10 py-6 text-center text-gray-600 dark:text-gray-400 text-sm">
@@ -88,30 +126,21 @@ function Footer() {
     );
 }
 
-/* ---------- main component ---------- */
 export default function CommunityDashboard() {
-    // theme context (for internal decisions if needed)
     const { theme } = useContext(ThemeContext);
 
-    // wallet + provider
     const [wallet, setWallet] = useState(() => localStorage.getItem("wallet") || "");
     const [connected, setConnected] = useState(false);
     const [ethBalance, setEthBalance] = useState(null);
     const [network, setNetwork] = useState(null);
-
-    // ethers contract
     const [contract, setContract] = useState(null);
 
-    // on-chain group data (single contract)
     const [contractBalance, setContractBalance] = useState("0");
     const [totalSavingsOnChain, setTotalSavingsOnChain] = useState("0");
-
-    // UI
     const [toast, setToast] = useState(null);
-    const [activeTab, setActiveTab] = useState("home"); // home / groups / reports / admin
+    const [activeTab, setActiveTab] = useState("home");
 
-    // Groups (client side). Structure:
-    // { id, name, adminWallet, members: [wallets], localContributions: [{wallet, amount, time}], createdAt }
+
     const [groups, setGroups] = useState(() => {
         try {
             const raw = localStorage.getItem("community_groups_v1");
@@ -121,10 +150,13 @@ export default function CommunityDashboard() {
         }
     });
     const [selectedGroupId, setSelectedGroupId] = useState(() => {
-        return localStorage.getItem("community_selected_group") || (groups[0] && groups[0].id) || null;
+        try {
+            return localStorage.getItem("community_selected_group") || null;
+        } catch {
+            return null;
+        }
     });
 
-    // modals + forms
     const [openCreateGroup, setOpenCreateGroup] = useState(false);
     const [openContribute, setOpenContribute] = useState(false);
     const [openWithdraw, setOpenWithdraw] = useState(false);
@@ -137,17 +169,13 @@ export default function CommunityDashboard() {
 
     const createFirstRef = useRef(null);
 
-    // toast helper
     const showToast = (message, type = "info", ms = 3000) => {
         setToast({ message, type });
         setTimeout(() => setToast(null), ms);
     };
 
-    // provider helpers
     const providerAvailable = () => Boolean(window.ethereum && window.ethereum.request);
     const getProvider = () => new ethers.BrowserProvider(window.ethereum);
-
-    // connect on load if previously connected
     useEffect(() => {
         (async () => {
             if (providerAvailable()) {
@@ -158,18 +186,22 @@ export default function CommunityDashboard() {
                         const a = accounts[0];
                         setWallet(a);
                         setConnected(true);
+                        localStorage.setItem("wallet", a);
                         await fetchBalance(a);
                         initContract();
+                    } else if (localStorage.getItem("wallet")) {
+                        setWallet(localStorage.getItem("wallet"));
+                        await fetchBalance(localStorage.getItem("wallet"));
                     }
                 } catch (err) {
                     console.debug("connectOnLoad:", err);
                 }
             }
         })();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
     }, []);
 
-    // persist groups + selected group
+
     useEffect(() => {
         try {
             localStorage.setItem("community_groups_v1", JSON.stringify(groups));
@@ -182,7 +214,6 @@ export default function CommunityDashboard() {
         } catch {}
     }, [selectedGroupId]);
 
-    // init contract
     const initContract = async () => {
         if (!providerAvailable()) return;
         try {
@@ -190,7 +221,6 @@ export default function CommunityDashboard() {
             const signer = await prov.getSigner();
             const c = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
             setContract(c);
-            // fetch on-chain values
             try {
                 const bal = await c.getGroupBalance();
                 setContractBalance(ethers.formatEther(bal));
@@ -206,7 +236,6 @@ export default function CommunityDashboard() {
         }
     };
 
-    // wallet actions
     const connectWallet = async () => {
         if (!providerAvailable()) {
             showToast("Please install MetaMask or another web3 wallet", "error");
@@ -259,7 +288,6 @@ export default function CommunityDashboard() {
         }
     };
 
-    // on-chain operations (single group contract)
     const callJoinGroup = async () => {
         if (!contract) return showToast("Connect wallet to join group", "error");
         setLoading(true);
@@ -267,7 +295,6 @@ export default function CommunityDashboard() {
             const tx = await contract.joinGroup();
             await tx.wait();
             showToast("Joined on-chain group ✅", "success");
-            // Note: contract is single-group. If you want to mark local group membership:
             markLocalMembership(wallet);
         } catch (err) {
             console.error("joinGroup:", err);
@@ -285,14 +312,10 @@ export default function CommunityDashboard() {
             const tx = await contract.contribute({ value: ethers.parseEther(String(amountEth)) });
             await tx.wait();
             showToast("Contribution successful on-chain ✅", "success");
-            // update on-chain cached values
             try {
                 const bal = await contract.getGroupBalance();
                 setContractBalance(ethers.formatEther(bal));
-                const tot = await contract.totalSavings();
-                setTotalSavingsOnChain(ethers.formatEther(tot));
             } catch {}
-            // record contribution locally attached to selected group
             recordLocalContribution(wallet, amountEth);
         } catch (err) {
             console.error("contribute:", err);
@@ -307,7 +330,6 @@ export default function CommunityDashboard() {
         if (!amountEth || Number(amountEth) <= 0) return showToast("Enter a valid amount", "error");
         setLoading(true);
         try {
-            // withdraw(uint256 amount) expects wei
             const tx = await contract.withdraw(ethers.parseEther(String(amountEth)));
             await tx.wait();
             showToast(`Withdrew ${amountEth} ETH`, "success");
@@ -358,7 +380,7 @@ export default function CommunityDashboard() {
         if (!selectedGroupId) return;
         const next = groups.map((g) => {
             if (g.id !== selectedGroupId) return g;
-            const c = { wallet: addr, amount: String(amountEth), time: Date.now() };
+            const c = { wallet: addr || "unknown", amount: String(amountEth), time: Date.now() };
             return { ...g, localContributions: [c, ...g.localContributions] };
         });
         setGroups(next);
@@ -369,28 +391,27 @@ export default function CommunityDashboard() {
             showToast("Select or create a group first", "error");
             return;
         }
-        // We call the on-chain join (single group), and also mark local group membership
         await callJoinGroup();
         markLocalMembership(wallet);
     };
 
-    // UI derived helpers
     const selectedGroup = groups.find((g) => g.id === selectedGroupId) || null;
     const isAdmin = selectedGroup && selectedGroup.adminWallet && wallet && selectedGroup.adminWallet.toLowerCase() === wallet.toLowerCase();
 
-    // focus management for create modal
     useEffect(() => {
         if (openCreateGroup && createFirstRef.current) createFirstRef.current.focus();
     }, [openCreateGroup]);
 
-    // simple safety: if no selectedGroup but groups exist pick first
     useEffect(() => {
         if (!selectedGroupId && groups.length > 0) {
             setSelectedGroupId(groups[0].id);
         }
     }, [groups, selectedGroupId]);
 
-    /* ---------- render ---------- */
+    const handleNavigate = (path) => {
+        window.location.href = path;
+    };
+
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors">
             <Toast toast={toast} onClose={() => setToast(null)} />
@@ -399,11 +420,11 @@ export default function CommunityDashboard() {
                 onConnect={connectWallet}
                 onCopy={copyWallet}
                 onDisconnect={disconnectWallet}
+                onNavigate={handleNavigate}
                 network={network}
             />
 
             <main className="max-w-6xl mx-auto p-6">
-                {/* top area: group select + create */}
                 <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
                     <div className="flex items-center gap-3">
                         <div className="text-xl font-semibold">Community Savings</div>
@@ -425,7 +446,6 @@ export default function CommunityDashboard() {
                     </div>
                 </div>
 
-                {/* summary cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                     <div className="p-4 rounded-2xl bg-white dark:bg-gray-800 shadow">
                         <div className="text-xs text-gray-500 dark:text-gray-400">Selected Group</div>
@@ -446,12 +466,19 @@ export default function CommunityDashboard() {
                     </div>
                 </div>
 
-                {/* main content (changes with bottom nav) */}
+
                 <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow mb-6">
+                    <div className="flex items-center gap-2 mb-4">
+                        <button onClick={() => setActiveTab("home")} className={`px-3 py-1 rounded-full ${activeTab === "home" ? "bg-green-600 text-white" : "bg-white dark:bg-gray-700 text-sm"}`}>Overview</button>
+                        <button onClick={() => setActiveTab("groups")} className={`px-3 py-1 rounded-full ${activeTab === "groups" ? "bg-green-600 text-white" : "bg-white dark:bg-gray-700 text-sm"}`}>Group Details</button>
+                        <button onClick={() => setActiveTab("reports")} className={`px-3 py-1 rounded-full ${activeTab === "reports" ? "bg-green-600 text-white" : "bg-white dark:bg-gray-700 text-sm"}`}>Reports</button>
+                        <button onClick={() => setActiveTab("admin")} className={`px-3 py-1 rounded-full ${activeTab === "admin" ? "bg-green-600 text-white" : "bg-white dark:bg-gray-700 text-sm"}`}>Admin</button>
+                    </div>
+
                     {activeTab === "home" && (
                         <>
                             <h2 className="text-lg font-semibold mb-3">Welcome</h2>
-                            <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">Use the actions below to join groups, contribute funds, or manage your community. Select a group at the top (or create one).</p>
+                            <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">Use actions below to join groups, contribute funds, or manage your community. Select a group above or create one.</p>
 
                             <div className="grid md:grid-cols-3 gap-4">
                                 <div className="p-4 rounded-lg bg-green-50 dark:bg-gray-900">
@@ -526,7 +553,7 @@ export default function CommunityDashboard() {
                     {activeTab === "reports" && (
                         <>
                             <h2 className="text-lg font-semibold mb-3">Reports</h2>
-                            <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">Quick transparency snapshot combining on-chain and local data.</p>
+                            <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">Snapshot combining on-chain and local data.</p>
 
                             <div className="grid md:grid-cols-2 gap-4">
                                 <div className="p-4 rounded-lg bg-white dark:bg-gray-900">
@@ -547,7 +574,7 @@ export default function CommunityDashboard() {
                             {isAdmin ? (
                                 <>
                                     <h2 className="text-lg font-semibold mb-3">Admin Panel</h2>
-                                    <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">Withdraw from on-chain pool or manage group members (local).</p>
+                                    <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">Withdraw on-chain or manage members locally.</p>
 
                                     <div className="grid md:grid-cols-2 gap-4">
                                         <div className="p-4 rounded-lg bg-white dark:bg-gray-900">
@@ -591,7 +618,6 @@ export default function CommunityDashboard() {
                 <Footer />
             </main>
 
-            {/* Create Group Modal */}
             {openCreateGroup && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
                     <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg">
@@ -610,7 +636,6 @@ export default function CommunityDashboard() {
                 </div>
             )}
 
-            {/* Contribute Modal */}
             {openContribute && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
                     <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg">
@@ -619,7 +644,7 @@ export default function CommunityDashboard() {
                             <button className="text-gray-500" onClick={() => setOpenContribute(false)}>✕</button>
                         </div>
 
-                        <div className="mb-3 text-sm text-gray-600 dark:text-gray-300">Contributing will call the on-chain `contribute` method (single contract). The UI also records the contribution locally for the selected group.</div>
+                        <div className="mb-3 text-sm text-gray-600 dark:text-gray-300">Contributing will call the on-chain <code>contribute</code> method (single contract). The UI also records the contribution locally for the selected group.</div>
 
                         <input type="number" value={contributeAmount} onChange={(e) => setContributeAmount(e.target.value)} placeholder="Amount (ETH)" className="w-full px-3 py-2 rounded border dark:border-gray-700 bg-white dark:bg-gray-900 mb-3" />
 
@@ -631,7 +656,6 @@ export default function CommunityDashboard() {
                 </div>
             )}
 
-            {/* Withdraw Modal (admin) */}
             {openWithdraw && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
                     <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg">
@@ -651,16 +675,6 @@ export default function CommunityDashboard() {
                     </div>
                 </div>
             )}
-
-            {/* Bottom navigation */}
-            <nav className="fixed bottom-4 left-0 right-0 z-50 flex justify-center pointer-events-auto">
-                <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-full shadow-lg px-3 py-2 flex items-center justify-between">
-                    <button onClick={() => setActiveTab("home")} className={`flex-1 py-2 text-sm rounded-full ${activeTab === "home" ? "bg-green-600 text-white" : "text-gray-700 dark:text-gray-200"}`}>Home</button>
-                    <button onClick={() => setActiveTab("groups")} className={`flex-1 py-2 text-sm rounded-full ${activeTab === "groups" ? "bg-green-600 text-white" : "text-gray-700 dark:text-gray-200"}`}>Group</button>
-                    <button onClick={() => setActiveTab("reports")} className={`flex-1 py-2 text-sm rounded-full ${activeTab === "reports" ? "bg-green-600 text-white" : "text-gray-700 dark:text-gray-200"}`}>Reports</button>
-                    <button onClick={() => setActiveTab("admin")} className={`flex-1 py-2 text-sm rounded-full ${activeTab === "admin" ? "bg-green-600 text-white" : "text-gray-700 dark:text-gray-200"}`}>Admin</button>
-                </div>
-            </nav>
         </div>
     );
 }
