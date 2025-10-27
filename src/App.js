@@ -62,6 +62,15 @@ function AppLayout() {
                         }
                     />
                     <Route
+                        path="/employee-payment-dashboard"
+                        element={
+                        <ProtectedRoute>
+                            <EmployeePaymentDashboard/>
+                        </ProtectedRoute>
+                        }
+                       />
+
+                    <Route
                         path="/community-dashboard"
                         element={
                             <ProtectedRoute>
