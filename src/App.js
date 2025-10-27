@@ -19,27 +19,33 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import OTP from "./pages/OTP";
 import ProtectedRoute from "./components/ProtectedRoute";
+
+// ✅ Updated Dashboard Pages
 import CommunityDashboard from "./pages/CommunityDashboard";
 import SmartAllowanceDashboard from "./pages/SmartAllowanceDashboard";
 import EmployeePaymentDashboard from "./pages/EmployeePaymentDashboard";
-
 
 import { ThemeProvider } from "./context/ThemeContext";
 
 function AppLayout() {
     const location = useLocation();
 
-    const hideLayout =
-        location.pathname === "/dashboard" ||
-        location.pathname === "/community-dashboard" ||
-        location.pathname === "/smart-allowance-dashboard" ||
-        location.pathname === "/employee-payment-dashboard";
+    const dashboardPages = [
+        "/dashboard",
+        "/community-dashboard",
+        "/smart-allowance-dashboard",
+        "/employee-payment-dashboard"
+    ];
+
+    const hidePublicLayout = dashboardPages.includes(location.pathname);
 
     return (
+        <div className="flex flex-col min-h-screen transition-colors duration-300 bg-gray-50 dark:bg-gray-900 dark:text-gray-100">
 
-        <div className="flex flex-col min-h-screen transition-colors duration-300 bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100">
-            {!hideLayout && <Navbar />}
-            <main className={`flex-grow ${!hideLayout ? "pt-20" : ""}`}>
+
+            {!hidePublicLayout && <Navbar />}
+
+            <main className={`flex-grow ${!hidePublicLayout ? "pt-20" : ""}`}>
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/allowance" element={<Allowance />} />
@@ -50,31 +56,12 @@ function AppLayout() {
                     <Route path="/register" element={<Register />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/otp" element={<OTP />} />
-                    <Route path="/employee-payment-dashboard" element={<EmployeePaymentDashboard />} />
 
-                    {/* Protected Routes */}
                     <Route
                         path="/dashboard"
                         element={
                             <ProtectedRoute>
                                 <Dashboard />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/employee-payment-dashboard"
-                        element={
-                        <ProtectedRoute>
-                            <EmployeePaymentDashboard/>
-                        </ProtectedRoute>
-                        }
-                       />
-
-                    <Route
-                        path="/community-dashboard"
-                        element={
-                            <ProtectedRoute>
-                                <CommunityDashboard />
                             </ProtectedRoute>
                         }
                     />
@@ -86,9 +73,25 @@ function AppLayout() {
                             </ProtectedRoute>
                         }
                     />
+                    <Route
+                        path="/employee-payment-dashboard"
+                        element={
+                            <ProtectedRoute>
+                                <EmployeePaymentDashboard />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/community-dashboard"
+                        element={
+                            <ProtectedRoute>
+                                <CommunityDashboard />
+                            </ProtectedRoute>
+                        }
+                    />
                 </Routes>
             </main>
-            {!hideLayout && <Footer />}
+            {!hidePublicLayout && <Footer />}
         </div>
     );
 }
