@@ -8,9 +8,9 @@ function Navbar() {
     const { theme, toggleTheme } = useContext(ThemeContext);
 
     const dashboardLinks = [
-        { name: "Smart Allowance", path: "/smart-allowance-dashboard" },
-        { name: "Employee Payments", path: "/employee-payment-dashboard" },
-        { name: "Community Savings", path: "/community-dashboard" },
+        { name: "Smart Allowance", path: "/allowance" },
+        { name: "Employee Payments", path: "/payment" },
+        { name: "Community Savings", path: "/savings" },
     ];
 
     return (
